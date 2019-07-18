@@ -1,0 +1,10 @@
+(executable
+ (name test)
+ (libraries unix_sys_socket))
+
+(alias
+ (name runtest)
+ (deps
+  (:< test.exe))
+ (action
+  (run %{<})))

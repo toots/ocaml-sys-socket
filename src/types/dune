@@ -1,0 +1,4 @@
+(library
+ (name types)
+ (public_name unix-sys-socket.types)
+ (libraries ctypes.stubs))

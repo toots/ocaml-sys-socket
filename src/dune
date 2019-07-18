@@ -1,0 +1,25 @@
+(env
+  (dev
+     (flags (:standard -warn-error -A))))
+
+(library
+ (name         unix_sys_socket)
+ (public_name  unix-sys-socket)
+ (synopsis    "unix-sys-socket provides access to the features exposed in sys/socket.h")
+ (c_names      unix_sys_socket_stubs)
+ (libraries    unix ctypes types stubs))
+
+(rule
+ (targets unix_sys_socket_stubs.ml)
+ (deps    (:gen ./generator/gen_stubs.exe))
+ (action  (run %{gen} ml %{targets})))
+
+(rule
+ (targets unix_sys_socket_stubs.c)
+ (deps    (:gen ./generator/gen_stubs.exe))
+ (action  (run %{gen} c %{targets})))
+
+(rule
+ (targets unix_sys_socket_types.ml)
+ (deps    (:gen ./generator/gen_types_c))
+ (action  (system "%{gen} > %{targets}")))
