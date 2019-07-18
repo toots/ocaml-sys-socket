@@ -6,7 +6,7 @@ homepage: "https://github.com/savonet/unix-sys-socket"
 authors: "The Savonet Team <savonet-users@lists.sourceforge.net>"
 bug-reports: "https://github.com/savonet/unix-sys-socket/issues"
 dev-repo: "git+https://github.com/savonet/unix-sys-socket.git"
-synopsis: "unix-sys-socket provides access to the features exposed in sys/socket.h"
+synopsis: "This packages provides ctypes bindings to the features exposed in sys/socket.h"
 depends: [
   "ocaml"
   "dune"
