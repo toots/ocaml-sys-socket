@@ -1,4 +1,9 @@
 (library
  (name types)
  (public_name unix-sys-socket.types)
- (libraries ctypes.stubs))
+ (libraries constants ctypes.stubs))
+
+(rule
+ (targets unix_sys_socket_constants.ml)
+ (deps    (:gen ../generator/gen_constants_c))
+ (action  (system "%{gen} > %{targets}")))

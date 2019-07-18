@@ -1,10 +1,10 @@
 open Ctypes
 
 module Def (S : Cstubs.Types.TYPE) : sig 
-  val af_inet      : int S.const
-  val af_inet6     : int S.const
-  val af_unix      : int S.const
-  val af_undefined : int S.const
+  val af_inet      : int
+  val af_inet6     : int
+  val af_unix      : int
+  val af_undefined : int
   val sockaddr_un_path_len : int
   
   type sockaddr

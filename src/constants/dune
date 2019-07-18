@@ -1,0 +1,5 @@
+(library
+ (name constants)
+ (public_name unix-sys-socket.constants)
+ (libraries ctypes.stubs))
+

@@ -1,13 +1,9 @@
 open Ctypes
 
 module Def (S : Cstubs.Types.TYPE) = struct
-  include S
+  include Constants.Def(Unix_sys_socket_constants)
 
-  let af_inet = constant "AF_INET" int
-  let af_inet6 = constant "AF_INET6" int
-  let af_unix = constant "AF_UNIX" int
-  let af_undefined = constant "AF_UNSPEC" int
-  let sockaddr_un_path_len = 255
+  include S
 
   type sockaddr = unit
   type sockaddr_s = sockaddr Ctypes_static.structure
