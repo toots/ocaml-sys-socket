@@ -1,6 +1,6 @@
 open Ctypes
 
-module Constants = Constants.Def(Unix_sys_socket_constants)
+module Constants = Unix_sys_socket_constants.Def(Unix_sys_socket_generated_constants)
 
 module type SaFamily = sig
   type sa_family

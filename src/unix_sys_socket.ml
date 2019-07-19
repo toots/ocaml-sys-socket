@@ -1,8 +1,8 @@
 open Ctypes
 
-include Types.Def(Unix_sys_socket_types)
+include Unix_sys_socket_types.Def(Unix_sys_socket_generated_types)
 
-include Stubs.Def(Unix_sys_socket_stubs)
+include Unix_sys_socket_stubs.Def(Unix_sys_socket_generated_stubs)
 
 let inet_pton tag addr sockaddr_ptr =
   match inet_pton tag addr (to_voidp sockaddr_ptr) with

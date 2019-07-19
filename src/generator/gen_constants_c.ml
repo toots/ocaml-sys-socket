@@ -13,6 +13,6 @@ let () =
     Format.formatter_of_out_channel oc
   in
   Format.fprintf format "%s@\n" c_headers;
-  Cstubs.Types.write_c format (module Constants.Def);
+  Cstubs.Types.write_c format (module Unix_sys_socket_constants.Def);
   Format.pp_print_flush format ();
   close_out oc
