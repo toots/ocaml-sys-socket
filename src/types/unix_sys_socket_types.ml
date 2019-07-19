@@ -92,16 +92,14 @@ module Def (S : Cstubs.Types.TYPE) = struct
 
   include Socklen(S)
 
-  type sockaddr = unit
-  type sockaddr_s = sockaddr structure
-
   include SaFamily
-  module T = SaFamily.T(S)
 
   let af_unix = sa_family_of_int af_unix
   let af_inet = sa_family_of_int af_inet
   let af_inet6 = sa_family_of_int af_inet6
   let af_undefined = sa_family_of_int af_undefined
+
+  module T = SaFamily.T(S)
 
   let sa_family_t = S.typedef T.t "sa_family_t"
 
@@ -113,6 +111,9 @@ module Def (S : Cstubs.Types.TYPE) = struct
     let () = S.seal t
   end
 
+  type sockaddr = Sockaddr.t structure
+  let sockaddr_t = Sockaddr.t
+
   module SockaddrUnix = struct
     type t = unit
 
@@ -121,31 +122,35 @@ module Def (S : Cstubs.Types.TYPE) = struct
     let sun_path = S.field t "sun_path" (S.array sun_path_len S.char)
     let () = S.seal t
   end
+
+  type sockaddr_un = SockaddrUnix.t structure
+  let sockaddr_un_t = SockaddrUnix.t
   
-  type in_port_t = Unsigned.uint16
+  type in_port = Unsigned.uint16
+  let in_port_t = S.uint16_t
   
   module SockaddrInet = struct
-    type in_addr = unit
-    type in_addr_s = in_addr structure
-    type in_addr_t = Unsigned.uint32
+    type in_addr = Unsigned.uint32
+    let in_addr_t = S.uint32_t
   
     let in_addr = S.structure "in_addr"
-    let s_addr = S.field in_addr "s_addr" S.uint32_t
+    let s_addr = S.field in_addr "s_addr" in_addr_t
     let () = S.seal in_addr
   
     type t = unit
 
     let t = S.structure "sockaddr_in"
     let sin_family = S.field t "sin_family" sa_family_t
-    let sin_port = S.field t "sin_port" S.uint16_t
+    let sin_port = S.field t "sin_port" in_port_t
     let sin_addr  = S.field t "sin_addr " in_addr
     let () = S.seal t
   end
+
+  type sockaddr_in = SockaddrInet.t structure
+  let sockaddr_in_t = SockaddrInet.t
   
   module SockaddrInet6 = struct
-    type in6_addr = unit
-    type in6_addr_s = in6_addr structure
-    type in6_addr_t = Unsigned.uint8 carray
+    type in6_addr = Unsigned.uint8 carray
   
     let in6_addr = S.structure "in6_addr"
     let s6_addr = S.field in6_addr "s6_addr" (S.array 16 S.uint8_t)
@@ -155,10 +160,13 @@ module Def (S : Cstubs.Types.TYPE) = struct
 
     let t = S.structure "sockaddr_in6"
     let sin6_family = S.field t "sin6_family" sa_family_t
-    let sin6_port = S.field t "sin6_port" S.uint16_t
+    let sin6_port = S.field t "sin6_port" in_port_t
     let sin6_flowinfo = S.field t "sin6_flowinfo" S.uint32_t
     let sin6_addr  = S.field t "sin6_addr" in6_addr
     let sin6_scope_id = S.field t "sin6_scope_id" S.uint32_t
     let () = S.seal t
   end
+
+  type sockaddr_in6 = SockaddrInet6.t structure
+  let sockaddr_in6_t = SockaddrInet6.t
 end
