@@ -11,5 +11,6 @@ depends: [
   "ocaml"
   "dune"
   "ctypes"
+  "unix-errno"
 ]
 build: ["dune" "build" "-p" name "-j" jobs]

@@ -1,18 +1,29 @@
 open Ctypes
 
 module Def (S : Cstubs.Types.TYPE) : sig 
-  val af_inet      : int
-  val af_inet6     : int
-  val af_unix      : int
-  val af_undefined : int
-  val sockaddr_un_path_len : int
+  type sa_family
+
+  val int_of_sa_family : sa_family -> int
+
+  val af_inet      : sa_family
+  val af_inet6     : sa_family
+  val af_unix      : sa_family
+  val af_undefined : sa_family
+  val sun_path_len : int
+  val sa_data_len  : int
   
   type sockaddr
   type sockaddr_s = sockaddr structure
+
+  module Sockaddr : sig
+    val t : sockaddr_s S.typ
+    val sa_family : (sa_family, sockaddr_s) S.field
+    val sa_data : (char carray, sockaddr_s) S.field
+  end
   
   module SockaddrUnix : sig
     val t : sockaddr_s S.typ
-    val sun_family : (int, sockaddr_s) S.field 
+    val sun_family : (sa_family, sockaddr_s) S.field 
     val sun_path : (char carray, sockaddr_s) S.field 
   end
   
@@ -27,7 +38,7 @@ module Def (S : Cstubs.Types.TYPE) : sig
     val s_addr : (in_addr_t, in_addr_s) S.field
   
     val t : sockaddr_s S.typ
-    val sin_family : (int, sockaddr_s) S.field
+    val sin_family : (sa_family, sockaddr_s) S.field
     val sin_port : (in_port_t, sockaddr_s) S.field
     val sin_addr : (in_addr_s, sockaddr_s) S.field
   end
@@ -41,7 +52,7 @@ module Def (S : Cstubs.Types.TYPE) : sig
     val s6_addr : (in6_addr_t, in6_addr_s) S.field
   
     val t : sockaddr_s S.typ
-    val sin6_family : (int, sockaddr_s) S.field
+    val sin6_family : (sa_family, sockaddr_s) S.field
     val sin6_port : (in_port_t, sockaddr_s) S.field
     val sin6_flowinfo : (Unsigned.uint32, sockaddr_s) S.field
     val sin6_addr : (in6_addr_s, sockaddr_s) S.field

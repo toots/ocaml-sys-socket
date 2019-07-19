@@ -1,11 +1,9 @@
-open Ctypes
-
 module Def (S : Cstubs.Types.TYPE) = struct
-  include S
-
-  let af_inet = constant "AF_INET" int
-  let af_inet6 = constant "AF_INET6" int
-  let af_unix = constant "AF_UNIX" int
-  let af_undefined = constant "AF_UNSPEC" int
-  let sockaddr_un_path_len = constant "SUN_PATH_LEN" int
+  let af_inet = S.constant "AF_INET" S.int
+  let af_inet6 = S.constant "AF_INET6" S.int
+  let af_unix = S.constant "AF_UNIX" S.int
+  let af_undefined = S.constant "AF_UNSPEC" S.int
+  let sun_path_len = S.constant "SUN_PATH_LEN" S.int
+  let sa_data_len = S.constant "SA_DATA_LEN" S.int
+  let sa_family_len = S.constant "SA_FAMILY_LEN" S.int
 end

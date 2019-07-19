@@ -1,18 +1,83 @@
 open Ctypes
 
-module Def (S : Cstubs.Types.TYPE) = struct
-  include Constants.Def(Unix_sys_socket_constants)
+module Constants = Constants.Def(Unix_sys_socket_constants)
 
-  include S
+module type SaFamily = sig
+  type sa_family
+  val int_of_sa_family : sa_family -> int
+  val sa_family_of_int : int -> sa_family
+  
+  module T : functor (S : Cstubs.Types.TYPE) -> sig
+    val t : sa_family S.typ
+  end
+end
+
+let saFamily : (module SaFamily)  =
+    match Constants.sa_family_len with
+      | 1 ->  (module struct
+                 type sa_family = Unsigned.uint8
+                 let int_of_sa_family = Unsigned.UInt8.to_int
+                 let sa_family_of_int = Unsigned.UInt8.of_int                 
+                 module T (S : Cstubs.Types.TYPE) = struct
+                   let t = S.uint8_t
+                 end
+               end)
+      | 2 -> (module struct
+                 type sa_family = Unsigned.uint16
+                 let int_of_sa_family = Unsigned.UInt16.to_int
+                 let sa_family_of_int = Unsigned.UInt16.of_int
+                 module T (S : Cstubs.Types.TYPE) = struct
+                   let t = S.uint16_t
+                 end
+               end)
+      | 4 -> (module struct
+                 type sa_family = Unsigned.uint32
+                 let int_of_sa_family = Unsigned.UInt32.to_int
+                 let sa_family_of_int = Unsigned.UInt32.of_int
+                 module T (S : Cstubs.Types.TYPE) = struct
+                   let t = S.uint32_t
+                 end
+               end)
+      | 8 -> (module struct
+                 type sa_family = Unsigned.uint64
+                 let int_of_sa_family = Unsigned.UInt64.to_int
+                 let sa_family_of_int = Unsigned.UInt64.of_int
+                 module T (S : Cstubs.Types.TYPE) = struct
+                   let t = S.uint64_t
+                 end
+               end)
+      | _ -> assert false
+
+module SaFamily = (val saFamily : SaFamily)
+
+module Def (S : Cstubs.Types.TYPE) = struct
+  include Constants
 
   type sockaddr = unit
-  type sockaddr_s = sockaddr Ctypes_static.structure
+  type sockaddr_s = sockaddr structure
+
+  include SaFamily
+  module T = SaFamily.T(S)
+
+  let af_unix = sa_family_of_int af_unix
+  let af_inet = sa_family_of_int af_inet
+  let af_inet6 = sa_family_of_int af_inet6
+  let af_undefined = sa_family_of_int af_undefined
+
+  let sa_family_t = S.typedef T.t "sa_family_t"
+
+  module Sockaddr = struct
+    let t = S.structure "sockaddr"
+    let sa_family = S.field t "sa_family" sa_family_t
+    let sa_data = S.field t "sa_data" (S.array sa_data_len S.char)
+    let () = S.seal t
+  end
   
   module SockaddrUnix = struct
-    let t : sockaddr_s typ = structure "sockaddr_un"
-    let sun_family = field t "sun_family" int
-    let sun_path = field t "sun_path" (array sockaddr_un_path_len char)
-    let () = seal t
+    let t = S.structure "sockaddr_un"
+    let sun_family = S.field t "sun_family" sa_family_t
+    let sun_path = S.field t "sun_path" (S.array sun_path_len S.char)
+    let () = S.seal t
   end
   
   type in_port_t = Unsigned.uint16
@@ -22,15 +87,15 @@ module Def (S : Cstubs.Types.TYPE) = struct
     type in_addr_s = in_addr structure
     type in_addr_t = Unsigned.uint32
   
-    let in_addr = structure "in_addr"
-    let s_addr = field in_addr "s_addr" uint32_t
-    let () = seal in_addr
+    let in_addr = S.structure "in_addr"
+    let s_addr = S.field in_addr "s_addr" S.uint32_t
+    let () = S.seal in_addr
   
-    let t = structure "sockaddr_in"
-    let sin_family = field t "sin_family" int
-    let sin_port = field t "sin_port" uint16_t
-    let sin_addr  = field t "sin_addr " in_addr
-    let () = seal t
+    let t = S.structure "sockaddr_in"
+    let sin_family = S.field t "sin_family" sa_family_t
+    let sin_port = S.field t "sin_port" S.uint16_t
+    let sin_addr  = S.field t "sin_addr " in_addr
+    let () = S.seal t
   end
   
   module SockaddrInet6 = struct
@@ -38,16 +103,16 @@ module Def (S : Cstubs.Types.TYPE) = struct
     type in6_addr_s = in6_addr structure
     type in6_addr_t = Unsigned.uint8 carray
   
-    let in6_addr = structure "in6_addr"
-    let s6_addr = field in6_addr "s6_addr" (array 16 uint8_t)
-    let () = seal in6_addr
+    let in6_addr = S.structure "in6_addr"
+    let s6_addr = S.field in6_addr "s6_addr" (S.array 16 S.uint8_t)
+    let () = S.seal in6_addr
   
-    let t = structure "sockaddr_in6"
-    let sin6_family = field t "sin6_family" int
-    let sin6_port = field t "sin6_port" uint16_t
-    let sin6_flowinfo = field t "sin6_flowinfo" uint32_t
-    let sin6_addr  = field t "sin6_addr" in6_addr
-    let sin6_scope_id = field t "sin6_scope_id" uint32_t
-    let () = seal t
+    let t = S.structure "sockaddr_in6"
+    let sin6_family = S.field t "sin6_family" sa_family_t
+    let sin6_port = S.field t "sin6_port" S.uint16_t
+    let sin6_flowinfo = S.field t "sin6_flowinfo" S.uint32_t
+    let sin6_addr  = S.field t "sin6_addr" in6_addr
+    let sin6_scope_id = S.field t "sin6_scope_id" S.uint32_t
+    let () = S.seal t
   end
 end

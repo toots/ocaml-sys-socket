@@ -1,17 +1,28 @@
 open Ctypes
 
-val af_inet      : int
-val af_inet6     : int
-val af_unix      : int
-val af_undefined : int
-val sockaddr_un_path_len : int
+type sa_family
+val af_inet      : sa_family
+val af_inet6     : sa_family
+val af_unix      : sa_family
+val af_undefined : sa_family
+
+val int_of_sa_family : sa_family -> int
+
+val sa_data_len  : int
+val sun_path_len : int
 
 type sockaddr
 type sockaddr_s = sockaddr structure
 
+module Sockaddr : sig
+  val t : sockaddr_s typ
+  val sa_family : (sa_family, sockaddr_s) field
+  val sa_data : (char carray, sockaddr_s) field
+end
+
 module SockaddrUnix : sig
   val t : sockaddr_s typ
-  val sun_family : (int, sockaddr_s) field 
+  val sun_family : (sa_family, sockaddr_s) field 
   val sun_path : (char carray, sockaddr_s) field 
 end
 
@@ -26,7 +37,7 @@ module SockaddrInet : sig
   val s_addr : (in_addr_t, in_addr_s) field
 
   val t : sockaddr_s typ
-  val sin_family : (int, sockaddr_s) field
+  val sin_family : (sa_family, sockaddr_s) field
   val sin_port : (in_port_t, sockaddr_s) field
   val sin_addr : (in_addr_s, sockaddr_s) field
 end
@@ -40,11 +51,15 @@ module SockaddrInet6 : sig
   val s6_addr : (in6_addr_t, in6_addr_s) field
 
   val t : sockaddr_s typ
-  val sin6_family : (int, sockaddr_s) field
+  val sin6_family : (sa_family, sockaddr_s) field
   val sin6_port : (in_port_t, sockaddr_s) field
   val sin6_flowinfo : (Unsigned.uint32, sockaddr_s) field
   val sin6_addr : (in6_addr_s, sockaddr_s) field
   val sin6_scope_id : (Unsigned.uint32, sockaddr_s) field
 end
 
-val sockaddr_of_unix_sockaddr : Unix.sockaddr -> sockaddr_s
+val inet_pton : int -> string -> sockaddr_s ptr -> unit
+val inet_ntop : int -> sockaddr_s ptr -> string
+
+val to_unix_sockaddr : sockaddr_s -> Unix.sockaddr
+val of_unix_sockaddr : Unix.sockaddr -> sockaddr_s
