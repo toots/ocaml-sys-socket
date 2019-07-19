@@ -106,13 +106,16 @@ module Def (S : Cstubs.Types.TYPE) = struct
   let sa_family_t = S.typedef T.t "sa_family_t"
 
   module Sockaddr = struct
+    type t = unit
     let t = S.structure "sockaddr"
     let sa_family = S.field t "sa_family" sa_family_t
     let sa_data = S.field t "sa_data" (S.array sa_data_len S.char)
     let () = S.seal t
   end
-  
+
   module SockaddrUnix = struct
+    type t = unit
+
     let t = S.structure "sockaddr_un"
     let sun_family = S.field t "sun_family" sa_family_t
     let sun_path = S.field t "sun_path" (S.array sun_path_len S.char)
@@ -130,6 +133,8 @@ module Def (S : Cstubs.Types.TYPE) = struct
     let s_addr = S.field in_addr "s_addr" S.uint32_t
     let () = S.seal in_addr
   
+    type t = unit
+
     let t = S.structure "sockaddr_in"
     let sin_family = S.field t "sin_family" sa_family_t
     let sin_port = S.field t "sin_port" S.uint16_t
@@ -145,7 +150,9 @@ module Def (S : Cstubs.Types.TYPE) = struct
     let in6_addr = S.structure "in6_addr"
     let s6_addr = S.field in6_addr "s6_addr" (S.array 16 S.uint8_t)
     let () = S.seal in6_addr
-  
+
+    type t = unit
+
     let t = S.structure "sockaddr_in6"
     let sin6_family = S.field t "sin6_family" sa_family_t
     let sin6_port = S.field t "sin6_port" S.uint16_t

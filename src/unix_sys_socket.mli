@@ -16,19 +16,21 @@ val socklen_t : socklen typ
 val int_of_socklen : socklen -> int
 val socklen_of_int : int -> socklen
 
-type sockaddr
-type sockaddr_s = sockaddr structure
-
 module Sockaddr : sig
-  val t : sockaddr_s typ
-  val sa_family : (sa_family, sockaddr_s) field
-  val sa_data : (char carray, sockaddr_s) field
+  type t
+  val t : t structure typ
+  val sa_family : (sa_family, t structure) field
+  val sa_data : (char carray, t structure) field
 end
 
 module SockaddrUnix : sig
-  val t : sockaddr_s typ
-  val sun_family : (sa_family, sockaddr_s) field 
-  val sun_path : (char carray, sockaddr_s) field 
+  type t
+  val t : t structure typ
+  val sun_family : (sa_family, t structure) field 
+  val sun_path : (char carray, t structure) field 
+
+  val from_sockaddr : Sockaddr.t structure -> t structure
+  val to_sockaddr : t structure -> Sockaddr.t structure
 end
 
 type in_port_t = Unsigned.uint16
@@ -41,10 +43,14 @@ module SockaddrInet : sig
   val in_addr : in_addr_s typ
   val s_addr : (in_addr_t, in_addr_s) field
 
-  val t : sockaddr_s typ
-  val sin_family : (sa_family, sockaddr_s) field
-  val sin_port : (in_port_t, sockaddr_s) field
-  val sin_addr : (in_addr_s, sockaddr_s) field
+  type t
+  val t : t structure typ
+  val sin_family : (sa_family, t structure) field
+  val sin_port : (in_port_t, t structure) field
+  val sin_addr : (in_addr_s, t structure) field
+
+  val from_sockaddr : Sockaddr.t structure -> t structure
+  val to_sockaddr : t structure -> Sockaddr.t structure
 end
 
 module SockaddrInet6 : sig
@@ -55,16 +61,20 @@ module SockaddrInet6 : sig
   val in6_addr : in6_addr_s typ
   val s6_addr : (in6_addr_t, in6_addr_s) field
 
-  val t : sockaddr_s typ
-  val sin6_family : (sa_family, sockaddr_s) field
-  val sin6_port : (in_port_t, sockaddr_s) field
-  val sin6_flowinfo : (Unsigned.uint32, sockaddr_s) field
-  val sin6_addr : (in6_addr_s, sockaddr_s) field
-  val sin6_scope_id : (Unsigned.uint32, sockaddr_s) field
+  type t
+  val t : t structure typ
+  val sin6_family : (sa_family, t structure) field
+  val sin6_port : (in_port_t, t structure) field
+  val sin6_flowinfo : (Unsigned.uint32, t structure) field
+  val sin6_addr : (in6_addr_s, t structure) field
+  val sin6_scope_id : (Unsigned.uint32, t structure) field
+
+  val from_sockaddr : Sockaddr.t structure -> t structure
+  val to_sockaddr : t structure -> Sockaddr.t structure
 end
 
-val inet_pton : int -> string -> sockaddr_s ptr -> unit
-val inet_ntop : int -> sockaddr_s ptr -> string
+val inet_pton : int -> string -> Sockaddr.t ptr -> unit
+val inet_ntop : int -> Sockaddr.t ptr -> string
 
-val to_unix_sockaddr : sockaddr_s -> Unix.sockaddr
-val of_unix_sockaddr : Unix.sockaddr -> sockaddr_s
+val from_unix_sockaddr : Unix.sockaddr -> Sockaddr.t structure
+val to_unix_sockaddr : Sockaddr.t structure -> Unix.sockaddr

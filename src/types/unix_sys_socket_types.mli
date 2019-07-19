@@ -12,24 +12,24 @@ module Def (S : Cstubs.Types.TYPE) : sig
   val sun_path_len : int
   val sa_data_len  : int
   
-  type sockaddr
-  type sockaddr_s = sockaddr structure
-
   type socklen
   val socklen_t : socklen S.typ
   val int_of_socklen : socklen -> int
   val socklen_of_int : int -> socklen
 
   module Sockaddr : sig
-    val t : sockaddr_s S.typ
-    val sa_family : (sa_family, sockaddr_s) S.field
-    val sa_data : (char carray, sockaddr_s) S.field
+    type t
+    val t : t structure S.typ
+    val sa_family : (sa_family, t structure) S.field
+    val sa_data : (char carray, t structure) S.field
   end
   
   module SockaddrUnix : sig
-    val t : sockaddr_s S.typ
-    val sun_family : (sa_family, sockaddr_s) S.field 
-    val sun_path : (char carray, sockaddr_s) S.field 
+    type t
+
+    val t : t structure S.typ
+    val sun_family : (sa_family, t structure) S.field 
+    val sun_path : (char carray, t structure) S.field 
   end
   
   type in_port_t = Unsigned.uint16
@@ -42,10 +42,12 @@ module Def (S : Cstubs.Types.TYPE) : sig
     val in_addr : in_addr_s S.typ
     val s_addr : (in_addr_t, in_addr_s) S.field
   
-    val t : sockaddr_s S.typ
-    val sin_family : (sa_family, sockaddr_s) S.field
-    val sin_port : (in_port_t, sockaddr_s) S.field
-    val sin_addr : (in_addr_s, sockaddr_s) S.field
+    type t
+
+    val t : t structure S.typ
+    val sin_family : (sa_family, t structure) S.field
+    val sin_port : (in_port_t, t structure) S.field
+    val sin_addr : (in_addr_s, t structure) S.field
   end
   
   module SockaddrInet6 : sig
@@ -56,11 +58,13 @@ module Def (S : Cstubs.Types.TYPE) : sig
     val in6_addr : in6_addr_s S.typ
     val s6_addr : (in6_addr_t, in6_addr_s) S.field
   
-    val t : sockaddr_s S.typ
-    val sin6_family : (sa_family, sockaddr_s) S.field
-    val sin6_port : (in_port_t, sockaddr_s) S.field
-    val sin6_flowinfo : (Unsigned.uint32, sockaddr_s) S.field
-    val sin6_addr : (in6_addr_s, sockaddr_s) S.field
-    val sin6_scope_id : (Unsigned.uint32, sockaddr_s) S.field
+    type t
+
+    val t : t structure S.typ
+    val sin6_family : (sa_family, t structure) S.field
+    val sin6_port : (in_port_t, t structure) S.field
+    val sin6_flowinfo : (Unsigned.uint32, t structure) S.field
+    val sin6_addr : (in6_addr_s, t structure) S.field
+    val sin6_scope_id : (Unsigned.uint32, t structure) S.field
   end
 end
