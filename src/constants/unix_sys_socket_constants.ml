@@ -5,5 +5,6 @@ module Def (S : Cstubs.Types.TYPE) = struct
   let af_undefined = S.constant "AF_UNSPEC" S.int
   let sun_path_len = S.constant "SUN_PATH_LEN" S.int
   let sa_data_len = S.constant "SA_DATA_LEN" S.int
+  let socklen_t_len = S.constant "SOCKLEN_T_LEN" S.int
   let sa_family_len = S.constant "SA_FAMILY_LEN" S.int
 end

@@ -11,6 +11,11 @@ val int_of_sa_family : sa_family -> int
 val sa_data_len  : int
 val sun_path_len : int
 
+type socklen
+val socklen_t : socklen typ
+val int_of_socklen : socklen -> int
+val socklen_of_int : int -> socklen
+
 type sockaddr
 type sockaddr_s = sockaddr structure
 

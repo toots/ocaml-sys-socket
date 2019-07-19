@@ -1,4 +1,5 @@
 let () =
+  Printf.printf "sizeof(socklen_t) = %d\n%!" (Ctypes.sizeof Unix_sys_socket.socklen_t);
   let inet_addr =
     Unix.inet_addr_of_string "127.0.0.1"
   in

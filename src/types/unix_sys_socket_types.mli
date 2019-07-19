@@ -15,6 +15,11 @@ module Def (S : Cstubs.Types.TYPE) : sig
   type sockaddr
   type sockaddr_s = sockaddr structure
 
+  type socklen
+  val socklen_t : socklen S.typ
+  val int_of_socklen : socklen -> int
+  val socklen_of_int : int -> socklen
+
   module Sockaddr : sig
     val t : sockaddr_s S.typ
     val sa_family : (sa_family, sockaddr_s) S.field
