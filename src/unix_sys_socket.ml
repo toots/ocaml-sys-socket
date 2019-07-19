@@ -47,10 +47,15 @@ let to_unix_sockaddr s =
     | id when id = af_unix  ->
        let s = SockaddrUnix.from_sockaddr s in
        let path =
-         String.of_seq
-           (List.to_seq
-             (CArray.to_list
-               (!@ (s |-> SockaddrUnix.sun_path))))
+         !@ (s |-> SockaddrUnix.sun_path)
+       in
+       let len =
+          strnlen (CArray.start path)
+            (Unsigned.Size_t.of_int (CArray.length path))
+       in       
+       let path =
+         string_from_ptr (CArray.start path)
+           ~length:(Unsigned.Size_t.to_int len)
        in
        Unix.ADDR_UNIX path
     | id when id = af_inet  ->

@@ -3,6 +3,7 @@ let c_headers = "
 #include <sys/un.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <string.h>
 "
 
 let () =
