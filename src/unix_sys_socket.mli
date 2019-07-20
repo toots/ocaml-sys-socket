@@ -8,6 +8,11 @@ val af_undefined : sa_family
 
 val int_of_sa_family : sa_family -> int
 
+type socket_type
+val sock_dgram     : socket_type
+val sock_stream    : socket_type
+val sock_seqpacket : socket_type
+
 val sa_data_len  : int
 val sun_path_len : int
 

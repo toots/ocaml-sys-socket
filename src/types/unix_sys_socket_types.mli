@@ -11,6 +11,9 @@ module Def (S : Cstubs.Types.TYPE) : sig
   val af_undefined : sa_family
   val sun_path_len : int
   val sa_data_len  : int
+  val sock_dgram   : int
+  val sock_stream  : int
+  val sock_seqpacket : int
   
   type socklen
   val socklen_t : socklen S.typ

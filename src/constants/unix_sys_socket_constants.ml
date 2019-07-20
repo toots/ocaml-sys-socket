@@ -7,4 +7,7 @@ module Def (S : Cstubs.Types.TYPE) = struct
   let sa_data_len = S.constant "SA_DATA_LEN" S.int
   let socklen_t_len = S.constant "SOCKLEN_T_LEN" S.int
   let sa_family_len = S.constant "SA_FAMILY_LEN" S.int
+  let sock_dgram = S.constant "SOCK_DGRAM" S.int
+  let sock_stream = S.constant "SOCK_STREAM" S.int
+  let sock_seqpacket = S.constant "SOCK_STREAM" S.int
 end
