@@ -3,6 +3,7 @@ open Ctypes
 module Def (S : Cstubs.Types.TYPE) : sig 
   type sa_family
 
+  val sa_family_t : sa_family S.typ
   val int_of_sa_family : sa_family -> int
 
   val af_inet      : sa_family
