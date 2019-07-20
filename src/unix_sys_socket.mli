@@ -9,6 +9,7 @@ val af_undefined : sa_family
 val int_of_sa_family : sa_family -> int
 
 type socket_type
+val socket_type_t  : socket_type typ
 val sock_dgram     : socket_type
 val sock_stream    : socket_type
 val sock_seqpacket : socket_type

@@ -3,6 +3,7 @@ open Ctypes
 include Unix_sys_socket_types.Def(Unix_sys_socket_generated_types)
 
 type socket_type = int
+let socket_type_t = int
 
 let from_sockaddr t ptr =
   from_voidp t (to_voidp ptr)
