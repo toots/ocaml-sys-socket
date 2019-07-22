@@ -86,7 +86,7 @@ let to_unix_sockaddr s =
 
 let from_unix_sockaddr sockaddr = 
   let ss =
-        allocate_n SockaddrStorage.t ~count:(sizeof sockaddr_storage_t)
+    allocate_n SockaddrStorage.t ~count:(sizeof sockaddr_storage_t)
   in
   begin
    match sockaddr with
