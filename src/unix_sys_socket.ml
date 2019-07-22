@@ -5,28 +5,27 @@ include Unix_sys_socket_types.Def(Unix_sys_socket_generated_types)
 type socket_type = int
 let socket_type_t = int
 
-let from_sockaddr t ptr =
+let from_sockaddr_storage t ptr =
   from_voidp t (to_voidp ptr)
 
-let to_sockaddr ptr =
-  from_voidp Sockaddr.t (to_voidp ptr)
+module Sockaddr = struct
+  include Sockaddr
+  let from_sockaddr_storage = from_sockaddr_storage t
+end
 
 module SockaddrUnix = struct
   include SockaddrUnix
-  let from_sockaddr = from_sockaddr t
-  let to_sockaddr = to_sockaddr
+  let from_sockaddr_storage = from_sockaddr_storage t
 end
 
 module SockaddrInet = struct
   include SockaddrInet
-  let from_sockaddr = from_sockaddr t
-  let to_sockaddr = to_sockaddr
+  let from_sockaddr_storage = from_sockaddr_storage t
 end
 
 module SockaddrInet6 = struct
   include SockaddrInet6
-  let from_sockaddr = from_sockaddr t
-  let to_sockaddr = to_sockaddr
+  let from_sockaddr_storage = from_sockaddr_storage t
 end
 
 include Unix_sys_socket_stubs.Def(Unix_sys_socket_generated_stubs)
@@ -46,9 +45,9 @@ let inet_ntop tag sockaddr_ptr =
         | ret  -> Some ret))
 
 let to_unix_sockaddr s =
-  match !@ (s |-> Sockaddr.sa_family) with
+  match !@ (s |-> SockaddrStorage.ss_family) with
     | id when id = af_unix  ->
-       let s = SockaddrUnix.from_sockaddr s in
+       let s = SockaddrUnix.from_sockaddr_storage s in
        let path =
          !@ (s |-> SockaddrUnix.sun_path)
        in
@@ -62,7 +61,7 @@ let to_unix_sockaddr s =
        in
        Unix.ADDR_UNIX path
     | id when id = af_inet  ->
-       let s = SockaddrInet.from_sockaddr s in
+       let s = SockaddrInet.from_sockaddr_storage s in
        let inet_addr =
          Unix.inet_addr_of_string
            (inet_ntop (int_of_sa_family af_inet) (s |-> SockaddrInet.sin_addr))
@@ -73,7 +72,7 @@ let to_unix_sockaddr s =
        in
        Unix.ADDR_INET (inet_addr, port)
     | id when id = af_inet6 ->
-       let s = SockaddrInet6.from_sockaddr s in
+       let s = SockaddrInet6.from_sockaddr_storage s in
        let inet_addr =
          Unix.inet_addr_of_string
            (inet_ntop (int_of_sa_family af_inet6) (s |-> SockaddrInet6.sin6_addr))
@@ -83,42 +82,40 @@ let to_unix_sockaddr s =
            (!@ (s |-> SockaddrInet6.sin6_port))
        in
        Unix.ADDR_INET (inet_addr, port)
-    | _ -> failwith "unix_sockaddr_from_sockaddr"
+    | _ -> failwith "unix_sockaddr_from_sockaddr_storage"
 
-let from_unix_sockaddr = function
-  | Unix.ADDR_UNIX path ->
-      let path =
-        if String.length path > sun_path_len then
-          String.sub path 0 sun_path_len
-        else
-          path
-      in
-      let path =
-        CArray.of_list char (List.of_seq (String.to_seq path))
-      in
-      let s =
-        allocate_n SockaddrUnix.t ~count:(sizeof sockaddr_un_t) 
-      in
-      (s |-> SockaddrUnix.sun_family) <-@ af_unix;
-      (s |-> SockaddrUnix.sun_path) <-@ path;
-      SockaddrUnix.to_sockaddr s
-  | Unix.ADDR_INET (inet_addr,port) ->
-      let inet_addr = 
-        Unix.string_of_inet_addr inet_addr
-      in
-      try      
-        let s =
-          allocate_n SockaddrInet6.t ~count:(sizeof sockaddr_in6_t)
-        in
-        (s |-> SockaddrInet6.sin6_family) <-@ af_inet6;
-        (s |-> SockaddrInet6.sin6_port) <-@ (Unsigned.UInt16.of_int port);
-        inet_pton (int_of_sa_family af_inet6) inet_addr (s |-> SockaddrInet6.sin6_addr);
-        SockaddrInet6.to_sockaddr s 
-      with Failure s when s = "inet_addr_of_string" ->
-        let s =
-          allocate_n SockaddrInet.t ~count:(sizeof sockaddr_in_t)
-        in
-        (s |-> SockaddrInet.sin_family) <-@ af_inet;
-        (s |-> SockaddrInet.sin_port) <-@ (Unsigned.UInt16.of_int port);
-        inet_pton (int_of_sa_family af_inet) inet_addr (s |-> SockaddrInet.sin_addr);
-        SockaddrInet.to_sockaddr s
+let from_unix_sockaddr sockaddr = 
+  let ss =
+        allocate_n SockaddrStorage.t ~count:(sizeof sockaddr_storage_t)
+  in
+  begin
+   match sockaddr with
+     | Unix.ADDR_UNIX path ->
+         let path =
+           if String.length path > sun_path_len then
+             String.sub path 0 sun_path_len
+           else
+             path
+         in
+         let path =
+           CArray.of_list char (List.of_seq (String.to_seq path))
+         in
+         let s = SockaddrUnix.from_sockaddr_storage ss in
+         (s |-> SockaddrUnix.sun_family) <-@ af_unix;
+         (s |-> SockaddrUnix.sun_path) <-@ path
+     | Unix.ADDR_INET (inet_addr,port) ->
+         let inet_addr = 
+           Unix.string_of_inet_addr inet_addr
+         in
+         try      
+           let s = SockaddrInet6.from_sockaddr_storage ss in
+           (s |-> SockaddrInet6.sin6_family) <-@ af_inet6;
+           (s |-> SockaddrInet6.sin6_port) <-@ (Unsigned.UInt16.of_int port);
+           inet_pton (int_of_sa_family af_inet6) inet_addr (s |-> SockaddrInet6.sin6_addr)
+         with Failure s when s = "inet_addr_of_string" ->
+           let s = SockaddrInet.from_sockaddr_storage ss in
+           (s |-> SockaddrInet.sin_family) <-@ af_inet;
+           (s |-> SockaddrInet.sin_port) <-@ (Unsigned.UInt16.of_int port);
+           inet_pton (int_of_sa_family af_inet) inet_addr (s |-> SockaddrInet.sin_addr)
+  end;
+  ss

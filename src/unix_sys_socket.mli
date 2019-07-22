@@ -23,11 +23,22 @@ val socklen_t : socklen typ
 val int_of_socklen : socklen -> int
 val socklen_of_int : int -> socklen
 
+module SockaddrStorage : sig
+  type t
+  val t : t structure typ
+  val ss_family : (sa_family, t structure) field
+end
+
+type sockaddr_storage = SockaddrStorage.t structure
+val sockaddr_storage_t : sockaddr_storage typ
+
 module Sockaddr : sig
   type t
   val t : t structure typ
   val sa_family : (sa_family, t structure) field
   val sa_data : (char carray, t structure) field
+
+  val from_sockaddr_storage : SockaddrStorage.t structure ptr -> t structure ptr
 end
 
 type sockaddr = Sockaddr.t structure
@@ -39,8 +50,7 @@ module SockaddrUnix : sig
   val sun_family : (sa_family, t structure) field 
   val sun_path : (char carray, t structure) field 
 
-  val from_sockaddr : Sockaddr.t structure ptr -> t structure ptr
-  val to_sockaddr : t structure ptr -> Sockaddr.t structure ptr
+  val from_sockaddr_storage : SockaddrStorage.t structure ptr -> t structure ptr
 end
 
 type sockaddr_un = SockaddrUnix.t structure
@@ -61,8 +71,7 @@ module SockaddrInet : sig
   val sin_port : (in_port, t structure) field
   val sin_addr : (in_addr structure, t structure) field
 
-  val from_sockaddr : Sockaddr.t structure ptr -> t structure ptr
-  val to_sockaddr : t structure ptr -> Sockaddr.t structure ptr
+  val from_sockaddr_storage : SockaddrStorage.t structure ptr -> t structure ptr
 end
 
 type sockaddr_in = SockaddrInet.t structure
@@ -81,8 +90,7 @@ module SockaddrInet6 : sig
   val sin6_addr : (in6_addr structure, t structure) field
   val sin6_scope_id : (Unsigned.uint32, t structure) field
 
-  val from_sockaddr : Sockaddr.t structure ptr -> t structure ptr
-  val to_sockaddr : t structure ptr -> Sockaddr.t structure ptr
+  val from_sockaddr_storage : SockaddrStorage.t structure ptr -> t structure ptr
 end
 
 type sockaddr_in6 = SockaddrInet6.t structure
@@ -91,5 +99,5 @@ val sockaddr_in6_t : sockaddr_in6 typ
 val inet_pton : int -> string -> Sockaddr.t ptr -> unit
 val inet_ntop : int -> Sockaddr.t ptr -> string
 
-val from_unix_sockaddr : Unix.sockaddr -> sockaddr ptr
-val to_unix_sockaddr : sockaddr ptr -> Unix.sockaddr
+val from_unix_sockaddr : Unix.sockaddr -> sockaddr_storage ptr
+val to_unix_sockaddr : sockaddr_storage ptr -> Unix.sockaddr

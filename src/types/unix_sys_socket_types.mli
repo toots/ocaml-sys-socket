@@ -30,7 +30,16 @@ module Def (S : Cstubs.Types.TYPE) : sig
 
   type sockaddr = Sockaddr.t structure
   val sockaddr_t : sockaddr S.typ
-  
+
+  module SockaddrStorage : sig
+    type t
+    val t : t structure S.typ
+    val ss_family : (sa_family, t structure) S.field
+  end
+
+  type sockaddr_storage = SockaddrStorage.t structure
+  val sockaddr_storage_t : sockaddr_storage S.typ
+
   module SockaddrUnix : sig
     type t
 
