@@ -6,7 +6,7 @@ let () =
 
 let () =
   let inet_addr =
-    Unix.inet_addr_of_string "127.0.0.1"
+    Unix.inet_addr_of_string "0.0.0.1"
   in
   let ss =
     from_unix_sockaddr (Unix.ADDR_INET (inet_addr,80))
@@ -20,7 +20,8 @@ let () =
   in
   Printf.printf "sockaddr_in.sin_addr.s_addr = %d\n%!"
     (Unsigned.UInt32.to_int
-      (!@ ((sockaddr_in |-> SockaddrInet.sin_addr) |-> SockaddrInet.s_addr)));
+      (ntohl
+        (!@ ((sockaddr_in |-> SockaddrInet.sin_addr) |-> SockaddrInet.s_addr))));
   let unix_socket =
     to_unix_sockaddr ss
   in

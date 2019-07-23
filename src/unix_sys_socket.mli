@@ -18,6 +18,11 @@ val sock_seqpacket : socket_type
 val sa_data_len  : int
 val sun_path_len : int
 
+val ntohl : Unsigned.uint32 -> Unsigned.uint32
+val ntohs : Unsigned.uint16 -> Unsigned.uint16
+val htonl : Unsigned.uint32 -> Unsigned.uint32
+val htons : Unsigned.uint16 -> Unsigned.uint16
+
 type socklen
 val socklen_t : socklen typ
 val int_of_socklen : socklen -> int

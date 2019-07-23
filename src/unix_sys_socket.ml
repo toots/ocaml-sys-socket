@@ -2,6 +2,8 @@ open Ctypes
 
 include Unix_sys_socket_types.Def(Unix_sys_socket_generated_types)
 
+include Unix_sys_socket_stubs.Def(Unix_sys_socket_generated_stubs)
+
 type socket_type = int
 let socket_type_t = int
 
@@ -27,8 +29,6 @@ module SockaddrInet6 = struct
   include SockaddrInet6
   let from_sockaddr_storage = from_sockaddr_storage t
 end
-
-include Unix_sys_socket_stubs.Def(Unix_sys_socket_generated_stubs)
 
 let inet_pton tag addr sockaddr_ptr =
   match inet_pton tag addr (to_voidp sockaddr_ptr) with
@@ -68,7 +68,8 @@ let to_unix_sockaddr s =
        in
        let port =
          Unsigned.UInt16.to_int
-           (!@ (s |-> SockaddrInet.sin_port))
+           (ntohs
+             (!@ (s |-> SockaddrInet.sin_port)))
        in
        Unix.ADDR_INET (inet_addr, port)
     | id when id = af_inet6 ->
@@ -79,7 +80,8 @@ let to_unix_sockaddr s =
        in
        let port =
          Unsigned.UInt16.to_int
-           (!@ (s |-> SockaddrInet6.sin6_port))
+          (ntohs
+            (!@ (s |-> SockaddrInet6.sin6_port)))
        in
        Unix.ADDR_INET (inet_addr, port)
     | _ -> failwith "unix_sockaddr_from_sockaddr_storage"
@@ -104,18 +106,21 @@ let from_unix_sockaddr sockaddr =
          (s |-> SockaddrUnix.sun_family) <-@ af_unix;
          (s |-> SockaddrUnix.sun_path) <-@ path
      | Unix.ADDR_INET (inet_addr,port) ->
-         let inet_addr = 
+         let inet_addr =
            Unix.string_of_inet_addr inet_addr
          in
-         try      
+         let port =
+           htons (Unsigned.UInt16.of_int port)
+         in
+         try
            let s = SockaddrInet6.from_sockaddr_storage ss in
            (s |-> SockaddrInet6.sin6_family) <-@ af_inet6;
-           (s |-> SockaddrInet6.sin6_port) <-@ (Unsigned.UInt16.of_int port);
+           (s |-> SockaddrInet6.sin6_port) <-@ port;
            inet_pton (int_of_sa_family af_inet6) inet_addr (s |-> SockaddrInet6.sin6_addr)
          with Failure s when s = "inet_addr_of_string" ->
            let s = SockaddrInet.from_sockaddr_storage ss in
            (s |-> SockaddrInet.sin_family) <-@ af_inet;
-           (s |-> SockaddrInet.sin_port) <-@ (Unsigned.UInt16.of_int port);
+           (s |-> SockaddrInet.sin_port) <-@ port;
            inet_pton (int_of_sa_family af_inet) inet_addr (s |-> SockaddrInet.sin_addr)
   end;
   ss
