@@ -1,11 +1,11 @@
 open Ctypes
 
 type sa_family
-val sa_family_t  : sa_family typ
-val af_inet      : sa_family
-val af_inet6     : sa_family
-val af_unix      : sa_family
-val af_undefined : sa_family
+val sa_family_t : sa_family typ
+val af_inet     : sa_family
+val af_inet6    : sa_family
+val af_unix     : sa_family
+val af_unspec   : sa_family
 
 val int_of_sa_family : sa_family -> int
 

@@ -97,7 +97,7 @@ module Def (S : Cstubs.Types.TYPE) = struct
   let af_unix = sa_family_of_int af_unix
   let af_inet = sa_family_of_int af_inet
   let af_inet6 = sa_family_of_int af_inet6
-  let af_undefined = sa_family_of_int af_undefined
+  let af_unspec = sa_family_of_int af_unspec
 
   module T = SaFamily.T(S)
 

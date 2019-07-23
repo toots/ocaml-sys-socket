@@ -9,7 +9,7 @@ module Def (S : Cstubs.Types.TYPE) : sig
   val af_inet      : sa_family
   val af_inet6     : sa_family
   val af_unix      : sa_family
-  val af_undefined : sa_family
+  val af_unspec    : sa_family
   val sun_path_len : int
   val sa_data_len  : int
   val sock_dgram   : int
