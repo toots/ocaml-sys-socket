@@ -13,4 +13,5 @@ depends: [
   "ctypes"
   "unix-errno"
 ]
+available: [os != "win32"]
 build: ["dune" "build" "-p" name "-j" jobs]
