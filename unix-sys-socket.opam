@@ -10,7 +10,7 @@ synopsis: "This packages provides ctypes bindings to the features exposed in sys
 license: "MIT"
 depends: [
   "ocaml"
-  "dune"
+  "dune" {>= "1.10"}
   "ctypes"
   "unix-errno"
 ]
