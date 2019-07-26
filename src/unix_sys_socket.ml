@@ -13,11 +13,13 @@ let from_sockaddr_storage t ptr =
 module Sockaddr = struct
   include Sockaddr
   let from_sockaddr_storage = from_sockaddr_storage t
+  let sa_data_len = sa_data_len
 end
 
 module SockaddrUnix = struct
   include SockaddrUnix
   let from_sockaddr_storage = from_sockaddr_storage t
+  let sun_path_len = sun_path_len
 end
 
 module SockaddrInet = struct
