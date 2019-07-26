@@ -12,4 +12,6 @@ of the following headers:
 Its API mirrors as much as possible the original POSIX definitions, including integers representation (network bytes order,
 host byte order). It is defined in [unix_sys_socket.mli](src/unix_sys_socket.mli)
 
+A high-level wrapper for the OCaml [Unix](https://caml.inria.fr/pub/docs/manual-ocaml/libref/Unix.html) module is provided as well.
+
 Happy hacking!
