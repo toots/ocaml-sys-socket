@@ -42,7 +42,6 @@ let saFamily : (module SaFamily)  =
                  type sa_family = Unsigned.uint64
                  let int_of_sa_family = Unsigned.UInt64.to_int
                  let sa_family_of_int = Unsigned.UInt64.of_int
-                 let sa_family_t = uint64_t
                  module T (S : Cstubs.Types.TYPE) = struct
                    let t = S.uint64_t
                  end
@@ -50,10 +49,6 @@ let saFamily : (module SaFamily)  =
       | _ -> assert false
 
 module SaFamily = (val saFamily : SaFamily)
-
-type sa_family = SaFamily.sa_family
-let int_of_sa_family = SaFamily.int_of_sa_family
-let sa_family_of_int = SaFamily.sa_family_of_int
 
 module Def (S : Cstubs.Types.TYPE) = struct
   include Constants
