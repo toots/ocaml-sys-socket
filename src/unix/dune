@@ -1,0 +1,26 @@
+(env
+  (dev
+     (flags (:standard -warn-error -A))))
+
+(library
+ (name         sys_socket_unix)
+ (public_name  sys-socket.unix)
+ (synopsis    "sys-socket-unix provides access to unix-specific sockaddr_un")
+ (enabled_if   (= %{os_type} Unix))
+ (c_names      sys_socket_unix_generated_stubs)
+ (libraries    unix ctypes sys-socket sys-socket.unix-stubs sys-socket.unix-types))
+
+(rule
+ (targets sys_socket_unix_generated_stubs.ml)
+ (deps    (:gen ./generator/gen_stubs.exe))
+ (action  (run %{gen} ml %{targets})))
+
+(rule
+ (targets sys_socket_unix_generated_stubs.c)
+ (deps    (:gen ./generator/gen_stubs.exe))
+ (action  (run %{gen} c %{targets})))
+
+(rule
+ (targets sys_socket_unix_generated_types.ml)
+ (deps    (:gen ./generator/gen_types_c))
+ (action  (system "%{gen} > %{targets}")))

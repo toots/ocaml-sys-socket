@@ -1,5 +1,5 @@
 open Ctypes
-open Unix_sys_socket
+open Sys_socket
 
 let () =
   Printf.printf "sizeof(socklen_t) = %d\n%!" (sizeof socklen_t)

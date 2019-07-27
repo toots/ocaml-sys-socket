@@ -1,7 +1,8 @@
 let c_headers = "
 #include <sys/socket.h>
 #include <sys/un.h>
-#include <netinet/in.h>
+#define SUN_PATH_LEN (sizeof(((struct sockaddr_un *)0)->sun_path))
+#define SOCKLEN_T_LEN (sizeof(socklen_t))
 "
 
 let () =
@@ -11,6 +12,6 @@ let () =
     Format.formatter_of_out_channel oc
   in
   Format.fprintf format "%s@\n" c_headers;
-  Cstubs.Types.write_c format (module Sys_socket_types.Def);
+  Cstubs.Types.write_c format (module Sys_socket_unix_constants.Def);
   Format.pp_print_flush format ();
   close_out oc

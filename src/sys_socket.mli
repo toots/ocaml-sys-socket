@@ -13,21 +13,14 @@ val sock_dgram     : socket_type
 val sock_stream    : socket_type
 val sock_seqpacket : socket_type
 
-(** Ctypes routines for C type socklen_t. *)
-type socklen
-val socklen_t : socklen typ
-val int_of_socklen : socklen -> int
-val socklen_of_int : int -> socklen
-
 (** Type of the [sa_family] field. *)
-type sa_family
+type sa_family = Sys_socket_types.SaFamily.sa_family
 val sa_family_t : sa_family typ
 val int_of_sa_family : sa_family -> int
 
 (** Socket types constants. *)
 val af_inet     : sa_family
 val af_inet6    : sa_family
-val af_unix     : sa_family
 val af_unspec   : sa_family
 
 (** Storage-safe overall structure. Used to allocate
@@ -55,20 +48,6 @@ end
 
 type sockaddr = Sockaddr.t structure
 val sockaddr_t : sockaddr typ
-
-(** Unix socket_un structure. *)
-module SockaddrUnix : sig
-  type t
-  val t : t structure typ
-  val sun_family : (sa_family, t structure) field 
-  val sun_path : (char carray, t structure) field 
-  val sun_path_len : int
-
-  val from_sockaddr_storage : SockaddrStorage.t structure ptr -> t structure ptr
-end
-
-type sockaddr_un = SockaddrUnix.t structure
-val sockaddr_un_t : sockaddr_un typ
 
 (** Type for inet/inet6 socket port. *)
 type in_port = Unsigned.uint16

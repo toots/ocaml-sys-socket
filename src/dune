@@ -3,23 +3,23 @@
      (flags (:standard -warn-error -A))))
 
 (library
- (name         unix_sys_socket)
- (public_name  unix-sys-socket)
- (synopsis    "unix-sys-socket provides access to the features exposed in sys/socket.h")
- (c_names      unix_sys_socket_generated_stubs)
- (libraries    unix ctypes unix-errno.unix unix-sys-socket.types unix-sys-socket.stubs))
+ (name         sys_socket)
+ (public_name  sys-socket)
+ (synopsis    "sys-socket provides access to the features exposed in sys/socket.h")
+ (c_names      sys_socket_generated_stubs)
+ (libraries    unix ctypes unix-errno.unix sys-socket.types sys-socket.stubs))
 
 (rule
- (targets unix_sys_socket_generated_stubs.ml)
+ (targets sys_socket_generated_stubs.ml)
  (deps    (:gen ./generator/gen_stubs.exe))
  (action  (run %{gen} ml %{targets})))
 
 (rule
- (targets unix_sys_socket_generated_stubs.c)
+ (targets sys_socket_generated_stubs.c)
  (deps    (:gen ./generator/gen_stubs.exe))
  (action  (run %{gen} c %{targets})))
 
 (rule
- (targets unix_sys_socket_generated_types.ml)
+ (targets sys_socket_generated_types.ml)
  (deps    (:gen ./generator/gen_types_c))
  (action  (system "%{gen} > %{targets}")))

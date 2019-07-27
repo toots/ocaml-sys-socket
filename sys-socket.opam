@@ -1,0 +1,17 @@
+opam-version: "2.0"
+name: "sys-socket"
+version: "0.1.0"
+maintainer: "romain.beauxis@gmail.com"
+homepage: "https://github.com/savonet/sys-socket"
+authors: "The Savonet Team <savonet-users@lists.sourceforge.net>"
+bug-reports: "https://github.com/savonet/sys-socket/issues"
+dev-repo: "git+https://github.com/savonet/sys-socket.git"
+synopsis: "This packages provides ctypes bindings to the features exposed in sys/socket.h"
+license: "MIT"
+depends: [
+  "ocaml"
+  "dune" {>= "1.10"}
+  "ctypes"
+  "unix-errno"
+]
+build: ["dune" "build" "-p" name "-j" jobs]

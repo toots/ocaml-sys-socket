@@ -1,12 +1,5 @@
 let c_headers = "
-#ifdef _WIN32
-  #include <winsock.h>
-  #include <ws2ipdef.h>
-#else
-  #include <sys/socket.h>
-  #include <netinet/in.h>
-  #include <arpa/inet.h>
-#endif
+#include <string.h>
 "
 
 let () =
@@ -24,6 +17,6 @@ let () =
          Cstubs.write_c
       | _    -> assert false
   in
-  fn format ~prefix:"sys_socket" (module Sys_socket_stubs.Def);
+  fn format ~prefix:"sys_socket" (module Sys_socket_unix_stubs.Def);
   Format.pp_print_flush format ();
   close_out oc

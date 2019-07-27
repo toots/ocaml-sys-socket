@@ -3,6 +3,6 @@
      (flags (:standard -warn-error -A))))
 
 (library
- (name sys_socket_stubs)
- (public_name sys-socket.stubs)
+ (name sys_socket_unix_stubs)
+ (public_name sys-socket.unix-stubs)
  (libraries ctypes.stubs))

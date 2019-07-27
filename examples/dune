@@ -1,6 +1,6 @@
 (executable
  (name test)
- (libraries unix-sys-socket))
+ (libraries sys-socket))
 
 (alias
  (name runtest)

@@ -1,8 +1,10 @@
 open Ctypes
 
-include Unix_sys_socket_types.Def(Unix_sys_socket_generated_types)
+include Sys_socket_types.SaFamily
 
-include Unix_sys_socket_stubs.Def(Unix_sys_socket_generated_stubs)
+include Sys_socket_types.Def(Sys_socket_generated_types)
+
+include Sys_socket_stubs.Def(Sys_socket_generated_stubs)
 
 type socket_type = int
 let socket_type_t = int
@@ -14,12 +16,6 @@ module Sockaddr = struct
   include Sockaddr
   let from_sockaddr_storage = from_sockaddr_storage t
   let sa_data_len = sa_data_len
-end
-
-module SockaddrUnix = struct
-  include SockaddrUnix
-  let from_sockaddr_storage = from_sockaddr_storage t
-  let sun_path_len = sun_path_len
 end
 
 module SockaddrInet = struct
@@ -48,20 +44,6 @@ let inet_ntop tag sockaddr_ptr =
 
 let to_unix_sockaddr s =
   match !@ (s |-> SockaddrStorage.ss_family) with
-    | id when id = af_unix  ->
-       let s = SockaddrUnix.from_sockaddr_storage s in
-       let path =
-         !@ (s |-> SockaddrUnix.sun_path)
-       in
-       let len =
-          strnlen (CArray.start path)
-            (Unsigned.Size_t.of_int (CArray.length path))
-       in       
-       let path =
-         string_from_ptr (CArray.start path)
-           ~length:(Unsigned.Size_t.to_int len)
-       in
-       Unix.ADDR_UNIX path
     | id when id = af_inet  ->
        let s = SockaddrInet.from_sockaddr_storage s in
        let inet_addr =
@@ -94,19 +76,8 @@ let from_unix_sockaddr sockaddr =
   in
   begin
    match sockaddr with
-     | Unix.ADDR_UNIX path ->
-         let path =
-           if String.length path > sun_path_len then
-             String.sub path 0 sun_path_len
-           else
-             path
-         in
-         let path =
-           CArray.of_list char (List.of_seq (String.to_seq path))
-         in
-         let s = SockaddrUnix.from_sockaddr_storage ss in
-         (s |-> SockaddrUnix.sun_family) <-@ af_unix;
-         (s |-> SockaddrUnix.sun_path) <-@ path
+     | Unix.ADDR_UNIX _ ->
+         failwith "Not implemented, use Sys_socket_unix"
      | Unix.ADDR_INET (inet_addr,port) ->
          let inet_addr =
            Unix.string_of_inet_addr inet_addr
