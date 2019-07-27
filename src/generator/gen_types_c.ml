@@ -1,7 +1,12 @@
 let c_headers = "
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <netinet/in.h>
+#ifdef _WIN32
+  #include <winsock.h>
+  #include <ws2ipdef.h>
+#else
+  #include <sys/socket.h>
+  #include <sys/un.h>
+  #include <netinet/in.h>
+#endif
 "
 
 let () =
