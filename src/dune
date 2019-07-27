@@ -7,7 +7,7 @@
  (public_name  sys-socket)
  (synopsis    "sys-socket provides access to the features exposed in sys/socket.h")
  (c_names      sys_socket_generated_stubs)
- (libraries    unix ctypes unix-errno.unix sys-socket.types sys-socket.stubs))
+ (libraries    unix ctypes sys-socket.types sys-socket.stubs))
 
 (rule
  (targets sys_socket_generated_stubs.ml)

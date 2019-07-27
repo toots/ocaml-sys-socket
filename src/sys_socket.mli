@@ -92,10 +92,6 @@ end
 type sockaddr_in6 = SockaddrInet6.t structure
 val sockaddr_in6_t : sockaddr_in6 typ
 
-(** IP address conversion functions. *)
-val inet_pton : int -> string -> Sockaddr.t ptr -> unit
-val inet_ntop : int -> Sockaddr.t ptr -> string
-
 (** Interface with the [Unix] module. *)
 val from_unix_sockaddr : Unix.sockaddr -> sockaddr_storage ptr
 val to_unix_sockaddr : sockaddr_storage ptr -> Unix.sockaddr
