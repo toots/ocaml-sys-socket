@@ -8,4 +8,5 @@ module Def (S : Cstubs.Types.TYPE) = struct
   let sock_dgram = S.constant "SOCK_DGRAM" S.int
   let sock_stream = S.constant "SOCK_STREAM" S.int
   let sock_seqpacket = S.constant "SOCK_STREAM" S.int
+  let socklen_t_len = S.constant "SOCKLEN_T_LEN" S.int
 end

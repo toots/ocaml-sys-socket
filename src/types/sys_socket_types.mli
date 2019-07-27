@@ -20,6 +20,11 @@ module Def (S : Cstubs.Types.TYPE) : sig
   val sock_dgram   : int
   val sock_stream  : int
   val sock_seqpacket : int
+
+  type socklen
+  val socklen_t : socklen S.typ
+  val int_of_socklen : socklen -> int
+  val socklen_of_int : int -> socklen
   
   module Sockaddr : sig
     type t

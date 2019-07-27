@@ -19,6 +19,11 @@ let af_inet = Types.af_inet
 let af_inet6 = Types.af_inet6
 let af_unspec = Types.af_unspec
 
+type socklen = Types.socklen
+let socklen_t = Types.socklen_t
+let int_of_socklen = Types.int_of_socklen
+let socklen_of_int = Types.socklen_of_int
+
 let from_sockaddr_storage t ptr =
   from_voidp t (to_voidp ptr)
 

@@ -23,6 +23,12 @@ val af_inet     : sa_family
 val af_inet6    : sa_family
 val af_unspec   : sa_family
 
+(** Ctypes routines for C type socklen_t. *)
+type socklen
+val socklen_t : socklen typ
+val int_of_socklen : socklen -> int
+val socklen_of_int : int -> socklen
+
 (** Storage-safe overall structure. Used to allocate
     a structure large enough for any of the sub-types
     below. *)

@@ -2,7 +2,6 @@ let c_headers = "
 #include <sys/socket.h>
 #include <sys/un.h>
 #define SUN_PATH_LEN (sizeof(((struct sockaddr_un *)0)->sun_path))
-#define SOCKLEN_T_LEN (sizeof(socklen_t))
 "
 
 let () =
