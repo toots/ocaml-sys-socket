@@ -9,5 +9,7 @@
 
 (rule
  (targets sys_socket_generated_types.ml)
- (deps    (:gen ../generator/gen_types_c))
- (action  (with-stdout-to %{targets} (run %{gen}))))
+ (deps    (:exec ../generator/exec.sh)
+          (:gen ../generator/gen_types_c))
+ (action  (with-stdout-to %{targets}
+            (system "%{exec} %{ocaml-config:system} %{gen}"))))
