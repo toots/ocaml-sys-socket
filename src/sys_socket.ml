@@ -64,5 +64,10 @@ let getnameinfo sockaddr_ptr =
   match getnameinfo sockaddr_ptr (socklen_of_int (sizeof sockaddr_t))
                     s (socklen_of_int maxhost) 
                     null (socklen_of_int 0) Types.ni_numerichost with
-    | 1 -> ()
+    | 0 ->
+      let length =
+        Unsigned.Size_t.to_int
+          (strnlen s (Unsigned.Size_t.of_int Types.ni_maxhost))
+      in
+      string_from_ptr s ~length
     | _ -> failwith "inet_addr_of_string"

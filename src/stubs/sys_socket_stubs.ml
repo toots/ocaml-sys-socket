@@ -9,6 +9,8 @@ module Def (F : Cstubs.FOREIGN) = struct
 
   let getnameinfo = foreign "getnameinfo" (ptr sockaddr_t @-> socklen_t @-> ptr char @-> socklen_t @-> ptr void @-> socklen_t @-> int @-> (returning int))
 
+  let strnlen = foreign "strnlen" (ptr char @-> size_t @-> (returning size_t))
+
   let htonl = foreign "htonl" (uint32_t @-> (returning uint32_t))
 
   let htons = foreign "htons" (uint16_t @-> (returning uint16_t)) 

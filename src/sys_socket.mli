@@ -97,3 +97,5 @@ end
 
 type sockaddr_in6 = SockaddrInet6.t structure
 val sockaddr_in6_t : sockaddr_in6 typ
+
+val getnameinfo : sockaddr ptr -> string
