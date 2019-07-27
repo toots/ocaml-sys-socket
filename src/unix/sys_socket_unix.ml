@@ -3,8 +3,6 @@ open Sys_socket
 
 include Sys_socket_unix_types.Def(Sys_socket_unix_generated_types)
 
-include Sys_socket_unix_stubs.Def(Sys_socket_unix_generated_stubs)
-
 let from_sockaddr_storage t ptr =
   from_voidp t (to_voidp ptr)
 

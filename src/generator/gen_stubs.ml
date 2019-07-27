@@ -6,6 +6,7 @@ let c_headers = "
   #include <sys/socket.h>
   #include <netinet/in.h>
   #include <arpa/inet.h>
+  #include <netdb.h>
 #endif
 "
 
@@ -24,6 +25,6 @@ let () =
          Cstubs.write_c
       | _    -> assert false
   in
-  fn format ~prefix:"sys_socket" (module Sys_socket_stubs.Def);
+  fn ~concurrency:Cstubs.unlocked format ~prefix:"sys_socket" (module Sys_socket_stubs.Def);
   Format.pp_print_flush format ();
   close_out oc

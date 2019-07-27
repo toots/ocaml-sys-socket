@@ -20,6 +20,9 @@ module Def (S : Cstubs.Types.TYPE) : sig
   val sock_dgram   : int
   val sock_stream  : int
   val sock_seqpacket : int
+  val ni_maxserv   : int
+  val ni_maxhost   : int
+  val ni_numerichost : int
 
   type socklen
   val socklen_t : socklen S.typ

@@ -4,8 +4,6 @@ include Sys_socket_types.SaFamily
 
 include Sys_socket_stubs.Def(Sys_socket_generated_stubs)
 
-module Types = Sys_socket_types.Def(Sys_socket_generated_types)
-
 type socket_type = int
 let socket_type_t = int
 
@@ -59,3 +57,12 @@ end
 
 type sockaddr_in6 = SockaddrInet6.t structure
 let sockaddr_in6_t = SockaddrInet6.t
+
+let getnameinfo sockaddr_ptr =
+  let maxhost = Types.ni_maxhost in
+  let s = allocate_n char ~count:maxhost in
+  match getnameinfo sockaddr_ptr (socklen_of_int (sizeof sockaddr_t))
+                    s (socklen_of_int maxhost) 
+                    null (socklen_of_int 0) Types.ni_numerichost with
+    | 1 -> ()
+    | _ -> failwith "inet_addr_of_string"

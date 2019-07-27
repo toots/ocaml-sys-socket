@@ -9,4 +9,7 @@ module Def (S : Cstubs.Types.TYPE) = struct
   let sock_stream = S.constant "SOCK_STREAM" S.int
   let sock_seqpacket = S.constant "SOCK_STREAM" S.int
   let socklen_t_len = S.constant "SOCKLEN_T_LEN" S.int
+  let ni_maxserv = S.constant "NI_MAXSERV" S.int
+  let ni_maxhost = S.constant "NI_MAXHOST" S.int
+  let ni_numerichost = S.constant "NI_NUMERICHOST" S.int
 end

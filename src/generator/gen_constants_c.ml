@@ -5,11 +5,20 @@ let c_headers = "
 #else
   #include <sys/socket.h>
   #include <sys/un.h>
+  #include <netdb.h>
 #endif
 
 #define SA_DATA_LEN (sizeof(((struct sockaddr*)0)->sa_data))
 #define SA_FAMILY_LEN (sizeof(((struct sockaddr*)0)->sa_family))
 #define SOCKLEN_T_LEN (sizeof(socklen_t))
+
+#ifndef NI_MAXHOST
+  #define NI_MAXHOST 1025
+#endif
+
+#ifndef NI_MAXSERV
+  #define NI_MAXSERV 32
+#endif
 "
 
 let () =
