@@ -91,10 +91,16 @@ let getnameinfo sockaddr_ptr =
 
 let getaddrinfo host port =
   let port = string_of_int port in
+  let hints =
+    allocate_n Types.Addrinfo.t ~count:1
+  in
+  (hints |-> Types.Addrinfo.ai_flags) <-@
+     (Types.ni_numerichost lor
+      Types.ni_numericserv);
   let ret =
     allocate_n (ptr Types.Addrinfo.t) ~count:1
   in
-  match getaddrinfo host port null ret with
+  match getaddrinfo host port hints ret with
     | 0 ->
       let addrinfo =
          allocate Sockaddr.t

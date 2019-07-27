@@ -43,6 +43,7 @@ module Def (S : Cstubs.Types.TYPE) : sig
   module Addrinfo : sig
     type t
     val t : t structure S.typ
+    val ai_flags : (int, t structure) S.field
     val ai_addrlen : (socklen, t structure) S.field
     val ai_addr : (sockaddr ptr, t structure) S.field
   end

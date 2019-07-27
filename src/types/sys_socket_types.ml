@@ -116,6 +116,7 @@ module Def (S : Cstubs.Types.TYPE) = struct
   module Addrinfo = struct
     type t = unit
     let t = S.structure "addrinfo"
+    let ai_flags = S.field t "ai_flags" S.int
     let ai_addrlen = S.field t "ai_addrlen" socklen_t
     let ai_addr = S.field t "ai_addr" (S.ptr Sockaddr.t)
     let () = S.seal t
