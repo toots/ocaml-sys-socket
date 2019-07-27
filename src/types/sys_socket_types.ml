@@ -113,6 +113,14 @@ module Def (S : Cstubs.Types.TYPE) = struct
   type sockaddr = Sockaddr.t structure
   let sockaddr_t = Sockaddr.t
 
+  module Addrinfo = struct
+    type t = unit
+    let t = S.structure "addrinfo"
+    let ai_addrlen = S.field t "ai_addrlen" socklen_t
+    let ai_addr = S.field t "ai_addr" (S.ptr Sockaddr.t)
+    let () = S.seal t
+  end
+
   module SockaddrStorage = struct
     type t = unit
     let t = S.structure "sockaddr_storage"

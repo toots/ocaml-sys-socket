@@ -61,13 +61,64 @@ let sockaddr_in6_t = SockaddrInet6.t
 let getnameinfo sockaddr_ptr =
   let maxhost = Types.ni_maxhost in
   let s = allocate_n char ~count:maxhost in
+  let maxserv = Types.ni_maxserv in
+  let p = allocate_n char ~count:maxserv in
   match getnameinfo sockaddr_ptr (socklen_of_int (sizeof sockaddr_t))
                     s (socklen_of_int maxhost) 
-                    null (socklen_of_int 0) Types.ni_numerichost with
+                    p (socklen_of_int maxserv)
+                    (Types.ni_numerichost lor
+                     Types.ni_numericserv)  with
     | 0 ->
-      let length =
-        Unsigned.Size_t.to_int
-          (strnlen s (Unsigned.Size_t.of_int Types.ni_maxhost))
+      let host =
+        let length =
+          Unsigned.Size_t.to_int
+            (strnlen s (Unsigned.Size_t.of_int maxhost))
+        in
+        string_from_ptr s ~length
       in
-      string_from_ptr s ~length
-    | _ -> failwith "inet_addr_of_string"
+      let port =
+        let length =
+          Unsigned.Size_t.to_int
+            (strnlen p (Unsigned.Size_t.of_int maxserv))
+        in
+        let port =
+          string_from_ptr p ~length
+        in
+        int_of_string port
+      in
+      host, port
+    | _ -> failwith "getnameinfo"
+
+let getaddrinfo host port =
+  let port = string_of_int port in
+  let ret =
+    allocate_n (ptr Types.Addrinfo.t) ~count:1
+  in
+  match getaddrinfo host port null ret with
+    | 0 ->
+      let addrinfo =
+         allocate Sockaddr.t
+           (!@ (!@ ((!@ ret) |-> Types.Addrinfo.ai_addr)))
+       in
+       freeaddrinfo (!@ ret);
+       addrinfo
+    | _ -> failwith "getaddrinfo"
+
+let to_unix_sockaddr s =
+  match !@ (s |-> Sockaddr.sa_family) with
+    | id when id = af_inet || id = af_inet6 ->
+       let inet_addr, port = getnameinfo s in
+       let inet_addr =
+         Unix.inet_addr_of_string inet_addr
+       in
+       Unix.ADDR_INET (inet_addr, port)
+    | _ -> failwith "Not implemented"
+
+let from_unix_sockaddr = function
+  | Unix.ADDR_UNIX _ ->
+      failwith "Not implemented"
+  | Unix.ADDR_INET (inet_addr,port) ->
+      let inet_addr =
+        Unix.string_of_inet_addr inet_addr
+      in
+      getaddrinfo inet_addr port

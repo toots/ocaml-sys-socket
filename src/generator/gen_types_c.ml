@@ -6,6 +6,7 @@ let c_headers = "
   #include <sys/socket.h>
   #include <sys/un.h>
   #include <netinet/in.h>
+  #include <netdb.h>
 #endif
 "
 

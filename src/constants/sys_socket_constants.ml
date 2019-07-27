@@ -12,4 +12,5 @@ module Def (S : Cstubs.Types.TYPE) = struct
   let ni_maxserv = S.constant "NI_MAXSERV" S.int
   let ni_maxhost = S.constant "NI_MAXHOST" S.int
   let ni_numerichost = S.constant "NI_NUMERICHOST" S.int
+  let ni_numericserv = S.constant "NI_NUMERICSERV" S.int
 end

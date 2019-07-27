@@ -23,6 +23,7 @@ module Def (S : Cstubs.Types.TYPE) : sig
   val ni_maxserv   : int
   val ni_maxhost   : int
   val ni_numerichost : int
+  val ni_numericserv : int
 
   type socklen
   val socklen_t : socklen S.typ
@@ -38,6 +39,13 @@ module Def (S : Cstubs.Types.TYPE) : sig
 
   type sockaddr = Sockaddr.t structure
   val sockaddr_t : sockaddr S.typ
+
+  module Addrinfo : sig
+    type t
+    val t : t structure S.typ
+    val ai_addrlen : (socklen, t structure) S.field
+    val ai_addr : (sockaddr ptr, t structure) S.field
+  end
 
   module SockaddrStorage : sig
     type t

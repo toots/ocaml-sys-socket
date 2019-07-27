@@ -7,7 +7,11 @@ module Def (F : Cstubs.FOREIGN) = struct
 
   open Types
 
-  let getnameinfo = foreign "getnameinfo" (ptr sockaddr_t @-> socklen_t @-> ptr char @-> socklen_t @-> ptr void @-> socklen_t @-> int @-> (returning int))
+  let getnameinfo = foreign "getnameinfo" (ptr sockaddr_t @-> socklen_t @-> ptr char @-> socklen_t @-> ptr char @-> socklen_t @-> int @-> (returning int))
+
+  let getaddrinfo = foreign "getaddrinfo" (string @-> string @-> ptr void @-> ptr (ptr Addrinfo.t) @-> (returning int))
+
+  let freeaddrinfo = foreign "freeaddrinfo" (ptr Addrinfo.t @-> returning (void))
 
   let strnlen = foreign "strnlen" (ptr char @-> size_t @-> (returning size_t))
 

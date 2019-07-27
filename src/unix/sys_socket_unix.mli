@@ -4,10 +4,6 @@ open Sys_socket
 (** Socket types constants. *)
 val af_unix     : sa_family
 
-(** IP address conversion functions. *)
-val inet_pton : int -> string -> Sockaddr.t ptr -> unit
-val inet_ntop : int -> Sockaddr.t ptr -> string
-
 (** Unix socket_un structure. *)
 module SockaddrUnix : sig
   type t
@@ -23,5 +19,5 @@ type sockaddr_un = SockaddrUnix.t structure
 val sockaddr_un_t : sockaddr_un typ
 
 (** Interface with the [Unix] module. *)
-val from_unix_sockaddr : Unix.sockaddr -> sockaddr_storage ptr
-val to_unix_sockaddr : sockaddr_storage ptr -> Unix.sockaddr
+val from_unix_sockaddr : Unix.sockaddr -> sockaddr ptr
+val to_unix_sockaddr : sockaddr ptr -> Unix.sockaddr
