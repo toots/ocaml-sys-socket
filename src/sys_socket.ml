@@ -89,7 +89,9 @@ let getnameinfo sockaddr_ptr =
         with _ ->
           match getservbyname p null with
             | ptr when is_null ptr -> failwith "getnameinfo"
-            | ptr -> !@ (ptr |-> Types.Servent.s_port)
+            | ptr ->
+               Unsigned.UInt16.to_int
+                 (ntohs (!@ (ptr |-> Types.Servent.s_port)))
       in
       host, port
     | _ -> failwith "getnameinfo"

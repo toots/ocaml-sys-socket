@@ -51,7 +51,7 @@ module Def (S : Cstubs.Types.TYPE) : sig
   module Servent : sig
     type t
     val t : t structure S.typ
-    val s_port : (int, t structure) S.field
+    val s_port : (Unsigned.uint16, t structure) S.field
   end
 
   module SockaddrStorage : sig

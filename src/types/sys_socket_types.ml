@@ -125,7 +125,7 @@ module Def (S : Cstubs.Types.TYPE) = struct
   module Servent = struct
     type t = unit
     let t = S.structure "servent"
-    let s_port = S.field t "s_port" S.int
+    let s_port = S.field t "s_port" S.uint16_t
     let () = S.seal t
   end
 

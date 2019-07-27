@@ -18,6 +18,6 @@ let () =
          Cstubs.write_c
       | _    -> assert false
   in
-  fn format ~prefix:"sys_socket" (module Sys_socket_unix_stubs.Def);
+  fn format ~prefix:"sys_socket_unix" (module Sys_socket_unix_stubs.Def);
   Format.pp_print_flush format ();
   close_out oc
