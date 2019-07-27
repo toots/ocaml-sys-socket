@@ -122,6 +122,13 @@ module Def (S : Cstubs.Types.TYPE) = struct
     let () = S.seal t
   end
 
+  module Servent = struct
+    type t = unit
+    let t = S.structure "servent"
+    let s_port = S.field t "s_port" S.int
+    let () = S.seal t
+  end
+
   module SockaddrStorage = struct
     type t = unit
     let t = S.structure "sockaddr_storage"

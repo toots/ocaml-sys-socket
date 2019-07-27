@@ -48,6 +48,12 @@ module Def (S : Cstubs.Types.TYPE) : sig
     val ai_addr : (sockaddr ptr, t structure) S.field
   end
 
+  module Servent : sig
+    type t
+    val t : t structure S.typ
+    val s_port : (int, t structure) S.field
+  end
+
   module SockaddrStorage : sig
     type t
     val t : t structure S.typ

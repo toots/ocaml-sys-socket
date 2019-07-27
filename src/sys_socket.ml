@@ -84,7 +84,12 @@ let getnameinfo sockaddr_ptr =
         let port =
           string_from_ptr p ~length
         in
-        int_of_string port
+        try
+          int_of_string port
+        with _ ->
+          match getservbyname p null with
+            | ptr when is_null ptr -> failwith "getnameinfo"
+            | ptr -> !@ (ptr |-> Types.Servent.s_port)
       in
       host, port
     | _ -> failwith "getnameinfo"

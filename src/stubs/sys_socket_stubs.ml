@@ -13,6 +13,8 @@ module Def (F : Cstubs.FOREIGN) = struct
 
   let freeaddrinfo = foreign "freeaddrinfo" (ptr Addrinfo.t @-> returning (void))
 
+  let getservbyname = foreign "getservbyname" (ptr char @-> ptr void @-> returning (ptr Servent.t))
+
   let strnlen = foreign "strnlen" (ptr char @-> size_t @-> (returning size_t))
 
   let htonl = foreign "htonl" (uint32_t @-> (returning uint32_t))
