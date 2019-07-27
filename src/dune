@@ -22,4 +22,4 @@
 (rule
  (targets sys_socket_generated_types.ml)
  (deps    (:gen ./generator/gen_types_c))
- (action  (system "%{gen} > %{targets}")))
+ (action  (with-stdout-to %{targets} (run %{gen}))))

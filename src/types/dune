@@ -1,3 +1,7 @@
+(env
+  (dev
+     (flags (:standard -warn-error -A))))
+
 (library
  (name sys_socket_types)
  (public_name sys-socket.types)
@@ -6,4 +10,4 @@
 (rule
  (targets sys_socket_generated_constants.ml)
  (deps    (:gen ../generator/gen_constants_c))
- (action  (system "%{gen} > %{targets}")))
+ (action  (with-stdout-to %{targets} (run %{gen}))))

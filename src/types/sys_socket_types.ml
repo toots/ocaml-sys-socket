@@ -59,9 +59,9 @@ module Def (S : Cstubs.Types.TYPE) = struct
   let af_inet6 = sa_family_of_int af_inet6
   let af_unspec = sa_family_of_int af_unspec
 
-  module T = SaFamily.T(S)
+  module SaFamilyT = SaFamily.T(S)
 
-  let sa_family_t = S.typedef T.t "sa_family_t"
+  let sa_family_t = S.typedef SaFamilyT.t "sa_family_t"
 
   module Sockaddr = struct
     type t = unit
