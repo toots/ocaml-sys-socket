@@ -54,9 +54,3 @@ end
 
 type sockaddr_in6 = SockaddrInet6.t structure
 let sockaddr_in6_t = SockaddrInet6.t
-
-let to_unix_sockaddr s =
-  assert false
-
-let from_unix_sockaddr sockaddr = 
-  assert false

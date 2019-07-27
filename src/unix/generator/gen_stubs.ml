@@ -1,4 +1,5 @@
 let c_headers = "
+#include <arpa/inet.h>
 #include <string.h>
 "
 

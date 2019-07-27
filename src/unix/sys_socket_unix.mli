@@ -10,6 +10,10 @@ val socklen_of_int : int -> socklen
 (** Socket types constants. *)
 val af_unix     : sa_family
 
+(** IP address conversion functions. *)
+val inet_pton : int -> string -> Sockaddr.t ptr -> unit
+val inet_ntop : int -> Sockaddr.t ptr -> string
+
 (** Unix socket_un structure. *)
 module SockaddrUnix : sig
   type t

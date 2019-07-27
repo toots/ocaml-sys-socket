@@ -12,6 +12,7 @@ depends: [
   "ocaml"
   "dune" {>= "1.10"}
   "ctypes"
+  "unix-errno"
   "sys-socket"
 ]
 available: [os != "win32"]
