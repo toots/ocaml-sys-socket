@@ -111,7 +111,7 @@ module Def (S : Cstubs.Types.TYPE) = struct
   end
 
   type sockaddr = Sockaddr.t structure
-  let sockaddr_t = Sockaddr.t
+  let sockaddr_t : sockaddr S.typ = Sockaddr.t
 
   module Addrinfo = struct
     type t = unit
@@ -137,7 +137,7 @@ module Def (S : Cstubs.Types.TYPE) = struct
   end
 
   type sockaddr_storage = SockaddrStorage.t structure
-  let sockaddr_storage_t = SockaddrStorage.t
+  let sockaddr_storage_t : sockaddr_storage S.typ = SockaddrStorage.t
 
   type in_port = Unsigned.uint16
   let in_port_t = S.uint16_t
@@ -160,7 +160,7 @@ module Def (S : Cstubs.Types.TYPE) = struct
   end
 
   type sockaddr_in = SockaddrInet.t structure
-  let sockaddr_in_t = SockaddrInet.t
+  let sockaddr_in_t : sockaddr_in S.typ = SockaddrInet.t
   
   module SockaddrInet6 = struct
     type in6_addr = Unsigned.uint8 carray
@@ -181,5 +181,5 @@ module Def (S : Cstubs.Types.TYPE) = struct
   end
 
   type sockaddr_in6 = SockaddrInet6.t structure
-  let sockaddr_in6_t = SockaddrInet6.t
+  let sockaddr_in6_t : sockaddr_in6 S.typ = SockaddrInet6.t
 end

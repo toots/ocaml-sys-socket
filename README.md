@@ -1,6 +1,8 @@
 # sys-socket
 
-The interface is implemented using [ocaml-ctypes](https://github.com/ocamllabs/ocaml-ctypes) is intended
+This module provides OCaml ctypes bindings to system-specific low-level socket structure and data-types.
+
+The interface is implemented using [ocaml-ctypes](https://github.com/ocamllabs/ocaml-ctypes) and is intended
 to exposed the machine-specific, low-level details of the most important parts of socket implementations.
 
 [Sys_socket](src/sys_socket.mli) provides an API compatible for both `Unix` and `Win32` systems, while [Sys_socket_unix](src/unix/sys_socket_unix.mli) provides the API specific to `Unix` systems, mostly the `sockaddr_u` structure.

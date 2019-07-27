@@ -1,12 +1,12 @@
 (executable
  (name gen_stubs)
  (modules gen_stubs)
- (libraries sys-socket.unix-stubs ctypes.stubs))
+ (libraries sys-socket-unix.stubs ctypes.stubs))
 
 (executable
  (name gen_types_c)
  (modules gen_types_c)
- (libraries sys-socket.unix-types ctypes.stubs))
+ (libraries sys-socket-unix.types ctypes.stubs))
 
 (rule
  (targets gen_types.c)
@@ -21,7 +21,7 @@
 (executable
  (name gen_constants_c)
  (modules gen_constants_c)
- (libraries sys-socket.unix-constants ctypes.stubs))
+ (libraries sys-socket-unix.constants ctypes.stubs))
 
 (rule
  (targets gen_constants.c)

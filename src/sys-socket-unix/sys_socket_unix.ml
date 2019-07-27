@@ -1,13 +1,19 @@
 open Ctypes
 open Sys_socket
 
-include Sys_socket_unix_types.Def(Sys_socket_unix_generated_types)
+module Types = Sys_socket_unix_types.Def(Sys_socket_unix_generated_types)
+
+let sun_path_len = Types.sun_path_len
+let af_unix = Types.af_unix
+
+type sockaddr_un = Types.sockaddr_un
+let sockaddr_un_t = Types.sockaddr_un_t
 
 let from_ptr t ptr =
   from_voidp t (to_voidp ptr)
 
 module SockaddrUnix = struct
-  include SockaddrUnix
+  include Types.SockaddrUnix
   let from_sockaddr_storage = from_ptr t
   let sun_path_len = sun_path_len
 end
@@ -44,8 +50,10 @@ let from_unix_sockaddr = function
         else
           path
       in
+      let ret = ref [] in
+      String.iter (fun c -> ret := c::!ret) path;
       let path =
-        CArray.of_list char (List.of_seq (String.to_seq path))
+        CArray.of_list char (List.rev !ret)
       in
       let s = SockaddrUnix.from_sockaddr_storage ss in
       (s |-> SockaddrUnix.sun_family) <-@ af_unix;

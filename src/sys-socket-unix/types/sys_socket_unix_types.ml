@@ -20,5 +20,5 @@ module Def (S : Cstubs.Types.TYPE) = struct
   end
 
   type sockaddr_un = SockaddrUnix.t structure
-  let sockaddr_un_t = SockaddrUnix.t
+  let sockaddr_un_t : sockaddr_un S.typ = SockaddrUnix.t
 end
