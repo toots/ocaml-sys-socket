@@ -104,17 +104,37 @@ let getaddrinfo host port =
   (hints |-> Types.Addrinfo.ai_flags) <-@
      (Types.ni_numerichost lor
       Types.ni_numericserv);
-  let ret =
+  let p =
     allocate_n (ptr Types.Addrinfo.t) ~count:1
   in
-  match getaddrinfo host port hints ret with
-    | 0 ->
-      let addrinfo =
-         allocate Sockaddr.t
-           (!@ (!@ ((!@ ret) |-> Types.Addrinfo.ai_addr)))
+  let rec extract_len len = function
+    | o when is_null (!@ o) ->
+        len
+    | o ->
+        extract_len (len+1) (o +@ 1)
+  in
+  let copy p =
+    let count = extract_len 0 p in
+    let ret =
+      allocate_n (ptr Types.Sockaddr.t) ~count
+    in
+    for i = 0 to count-1 do
+      let elp = p +@ i in
+      let el =
+        allocate Sockaddr.t
+          (!@ (!@ ((!@ elp) |-> Types.Addrinfo.ai_addr))) 
+      in
+      (ret +@ i) <-@ el
+    done;
+    ret
+  in
+  match getaddrinfo host port hints p with
+    | 0 -> 
+       let ret =
+         copy p
        in
-       freeaddrinfo (!@ ret);
-       addrinfo
+       freeaddrinfo (!@ p);
+       ret
     | _ -> failwith "getaddrinfo"
 
 let to_unix_sockaddr s =
@@ -134,4 +154,7 @@ let from_unix_sockaddr = function
       let inet_addr =
         Unix.string_of_inet_addr inet_addr
       in
-      getaddrinfo inet_addr port
+      match getaddrinfo inet_addr port with
+        | p when is_null (!@ p) ->
+             failwith "Resolution failed!"
+        | p -> !@ p
