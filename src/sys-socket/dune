@@ -11,10 +11,8 @@
 
 (rule
  (targets sys_socket_generated_stubs.ml)
- (deps    (:gen ./generator/gen_stubs.exe))
- (action  (run %{gen} ml %{targets})))
+ (action  (run ./generator/gen_stubs.exe ml %{targets})))
 
 (rule
  (targets sys_socket_generated_stubs.c)
- (deps    (:gen ./generator/gen_stubs.exe))
- (action  (run %{gen} c %{targets})))
+ (action  (run ./generator/gen_stubs.exe c %{targets})))

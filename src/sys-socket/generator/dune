@@ -10,8 +10,7 @@
 
 (rule
  (targets gen_types.c)
- (deps    (:gen ./gen_types_c.exe))
- (action  (run %{gen} %{targets})))
+ (action  (run ./gen_types_c.exe %{targets})))
 
 (rule
  (targets gen_types_c)
@@ -25,8 +24,7 @@
 
 (rule
  (targets gen_constants.c)
- (deps    (:gen ./gen_constants_c.exe))
- (action  (run %{gen} %{targets})))
+ (action  (run ./gen_constants_c.exe %{targets})))
 
 (rule
  (targets gen_constants_c)
