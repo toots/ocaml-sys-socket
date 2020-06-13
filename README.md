@@ -1,5 +1,7 @@
 # sys-socket
 
+## This package is DEPRECATED! See: [savonet/ocaml-posix](https://github.com/savonet/ocaml-posix) for the most recent work on this API.
+
 This module provides OCaml ctypes bindings to system-specific low-level socket structure and data-types.
 
 The interface is implemented using [ocaml-ctypes](https://github.com/ocamllabs/ocaml-ctypes) and is intended
